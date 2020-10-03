@@ -26,7 +26,7 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.AndroidEntryPoint;
 import dagger.hilt.android.components.ActivityComponent;
-import dagger.hilt.android.components.ApplicationComponent;
+import dagger.hilt.components.SingletonComponent;
 import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 import javax.inject.Inject;
@@ -45,7 +45,7 @@ public final class Injection2Test {
   private static final String ACTIVITY_VALUE = "Injection2Test_ActivityValue";
 
   @Module
-  @InstallIn(ApplicationComponent.class)
+  @InstallIn(SingletonComponent.class)
   interface TestApplicationModule {
     @Provides
     @Named(APPLICATION_QUALIFIER)
