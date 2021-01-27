@@ -38,7 +38,7 @@ public final class TestInjectorGenerator {
   }
 
   // @GeneratedEntryPoint
-  // @InstallIn(ApplicationComponent.class)
+  // @InstallIn(SingletonComponent.class)
   // public interface FooTest_GeneratedInjector extends TestInjector<FooTest> {}
   public void generate() throws IOException {
     TypeSpec.Builder builder =
@@ -51,13 +51,14 @@ public final class TestInjectorGenerator {
                     .addMember(
                         "value",
                         "$T.class",
-                    ClassNames.APPLICATION_COMPONENT)
+                    ClassNames.SINGLETON_COMPONENT)
                     .build())
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(
                 ParameterizedTypeName.get(ClassNames.TEST_INJECTOR, metadata.testName()))
             .addMethod(
                 MethodSpec.methodBuilder("injectTest")
+                    .addAnnotation(Override.class)
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                     .addParameter(
                         metadata.testName(),

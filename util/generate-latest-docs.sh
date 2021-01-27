@@ -1,6 +1,6 @@
 # see http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/ for details
 
-set -eu
+set -eux
 
 if [ "$TRAVIS_REPO_SLUG" == "google/dagger" ] && \
    [ "$TRAVIS_JDK_VERSION" == "$JDK_FOR_PUBLISHING" ] && \
@@ -21,10 +21,18 @@ if [ "$TRAVIS_REPO_SLUG" == "google/dagger" ] && \
   unzip "$JAVADOC_JAR" -d api/latest
   rm -rf api/latest/META-INF/
   git add -f api/latest
-  git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
-  git push -fq origin gh-pages > /dev/null
 
-  echo -e "Published Javadoc to gh-pages.\n"
+  # Check if there are any changes before committing, otherwise attempting
+  # to commit will fail the build (https://stackoverflow.com/a/2659808).
+  if git diff-index --quiet HEAD --; then
+    # The exist status is 1, meaing there are changes to commit
+    git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
+    git push -fq origin gh-pages > /dev/null
+    echo -e "Published Javadoc to gh-pages.\n"
+  else
+    # The exist status is 0, meaing there are no changes to commit
+    echo -e "Skipping publishing docs since no changes were detected."
+  fi
 else
   echo -e "Not publishing docs for jdk=${TRAVIS_JDK_VERSION} and branch=${TRAVIS_BRANCH}"
 fi

@@ -4,7 +4,7 @@
 #
 #  To run this script, just pass in a valid avd name:
 #
-#    $ path/to/run-local-emulator-tests.sh Android29
+#    $ path/to/run-local-emulator-tests.sh Android30
 
 set -ex
 
@@ -50,8 +50,21 @@ done
 
 readonly GRADLE_PROJECTS=(
     "javatests/artifacts/hilt-android/simple"
+    "javatests/artifacts/hilt-android/simpleKotlin"
 )
 for project in "${GRADLE_PROJECTS[@]}"; do
     echo "Running gradle tests for $project"
-    ./$project/gradlew -p $project connectedAndroidTest --no-daemon --stacktrace
+    {
+      ./$project/gradlew -p $project connectedAndroidTest --no-daemon --stacktrace
+    } || {
+      # Try running once more. This test is flaky failure due to InstallException
+      # TODO(b/176111885): See if there's a better way to prevent this flake
+      ./$project/gradlew -p $project connectedAndroidTest --no-daemon --stacktrace
+    }
 done
+
+# Run emulator tests in a project with configuration cache enabled
+# TODO(user): Once AGP 4.2.0 is stable, remove these project and enable
+# config cache in the other test projects.
+readonly CONFIG_CACHE_PROJECT="javatests/artifacts/hilt-android/gradleConfigCache"
+./$CONFIG_CACHE_PROJECT/gradlew -p $CONFIG_CACHE_PROJECT connectedAndroidTest --no-daemon --stacktrace --configuration-cache

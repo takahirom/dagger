@@ -271,7 +271,8 @@ public abstract class AndroidEntryPointMetadata {
           !MoreTypes.isTypeOf(Void.class, baseElement.asType()),
           androidEntryPointElement,
           "Expected @%s to have a value."
-          + " Did you forget to apply the Gradle Plugin?",
+          + " Did you forget to apply the Gradle Plugin? (dagger.hilt.android.plugin)\n"
+          + "See https://dagger.dev/hilt/gradle-setup.html" ,
           annotationClassName.simpleName());
 
       // Check that the root $CLASS extends Hilt_$CLASS
@@ -381,7 +382,7 @@ public abstract class AndroidEntryPointMetadata {
   private static final class Type {
     private static final Type APPLICATION =
         new Type(
-            AndroidClassNames.APPLICATION_COMPONENT,
+            AndroidClassNames.SINGLETON_COMPONENT,
             AndroidType.APPLICATION,
             AndroidClassNames.APPLICATION_COMPONENT_MANAGER,
             null);
@@ -393,7 +394,7 @@ public abstract class AndroidEntryPointMetadata {
             CodeBlock.of("this"));
     private static final Type BROADCAST_RECEIVER =
         new Type(
-            AndroidClassNames.APPLICATION_COMPONENT,
+            AndroidClassNames.SINGLETON_COMPONENT,
             AndroidType.BROADCAST_RECEIVER,
             AndroidClassNames.BROADCAST_RECEIVER_COMPONENT_MANAGER,
             null);

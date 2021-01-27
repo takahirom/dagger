@@ -23,7 +23,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(SingletonComponet::class)
+@InstallIn(SingletonComponent::class)
 object ApplicationModule {
   @Provides
   @Model

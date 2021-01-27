@@ -28,7 +28,6 @@ java_library(
     ],
     exports = [
         "//java/dagger/hilt/processor/internal/aggregateddeps:annotation",
-        "@google_bazel_common//third_party/java/jsr250_annotations",
     ],
     deps = [
         ":generates_root_input",
@@ -66,7 +65,6 @@ java_library(
     ],
     exports = [
         "//java/dagger/hilt/internal/generatesrootinput",
-        "@google_bazel_common//third_party/java/jsr250_annotations",
     ],
     deps = [
         ":package_info",
@@ -83,7 +81,6 @@ java_library(
     ],
     exports = [
         "//java/dagger/hilt/internal/definecomponent",
-        "@google_bazel_common//third_party/java/jsr250_annotations",
     ],
     deps = [
         ":generates_root_input",
@@ -106,6 +103,7 @@ filegroup(
         ":hilt_android_filegroup",
         ":hilt_android_testing_filegroup",
         ":hilt_filegroup",
+        ":hilt_testing_filegroup",
     ],
 )
 
@@ -123,6 +121,13 @@ filegroup(
 )
 
 filegroup(
+    name = "hilt_testing_filegroup",
+    srcs = [
+        "//java/dagger/hilt/testing:srcs_filegroup",
+    ],
+)
+
+filegroup(
     name = "hilt_android_filegroup",
     srcs = [
         "//java/dagger/hilt/android:srcs_filegroup",
@@ -133,6 +138,7 @@ filegroup(
         "//java/dagger/hilt/android/internal/managers:srcs_filegroup",
         "//java/dagger/hilt/android/internal/migration:srcs_filegroup",
         "//java/dagger/hilt/android/internal/modules:srcs_filegroup",
+        "//java/dagger/hilt/android/lifecycle:srcs_filegroup",
         "//java/dagger/hilt/android/migration:srcs_filegroup",
         "//java/dagger/hilt/android/plugin:srcs_filegroup",
         "//java/dagger/hilt/android/qualifiers:srcs_filegroup",
@@ -157,6 +163,7 @@ filegroup(
         "//java/dagger/hilt/android/processor/internal/bindvalue:srcs_filegroup",
         "//java/dagger/hilt/android/processor/internal/customtestapplication:srcs_filegroup",
         "//java/dagger/hilt/android/processor/internal/uninstallmodules:srcs_filegroup",
+        "//java/dagger/hilt/android/processor/internal/viewmodel:srcs_filegroup",
         "//java/dagger/hilt/processor:srcs_filegroup",
         "//java/dagger/hilt/processor/internal:srcs_filegroup",
         "//java/dagger/hilt/processor/internal/aggregateddeps:srcs_filegroup",
@@ -215,11 +222,11 @@ gen_maven_artifact(
     artifact_target_maven_deps = [
         "com.google.code.findbugs:jsr305",
         "com.google.dagger:dagger",
-        "javax.annotation:jsr250-api",
         "javax.inject:javax.inject",
     ],
     artifact_target_maven_deps_banned = [
         "com.google.guava:guava",
+        "javax.annotation:jsr250-api",
     ],
     javadoc_exclude_packages = [
         "dagger.hilt.internal",
